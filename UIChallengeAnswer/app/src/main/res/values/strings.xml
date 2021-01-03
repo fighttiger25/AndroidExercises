@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UI Challenge Answer</string>
+    <array name="countries">
+        <item>China</item>
+        <item>Norway</item>
+        <item>Germany</item>
+    </array>
+</resources>

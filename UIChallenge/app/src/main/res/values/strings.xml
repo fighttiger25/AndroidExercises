@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">UI Challenge</string>
+    <string name="pick_image">PICK IMAGE</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="re_enter_password">Re-enter Password</string>
+    <string name="gender">Gender:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="this_is_our_license_agreement_you_can_share_this_app_anywhere_that_you_want_and_use_it_however_you_want_just_remember_to_enjoy">This is our license agreement: You can share this app anywhere that you want and use it however you want. Just remember to enjoy.</string>
+    <string name="i_agree">I agree</string>
+    <array name="countries" >
+        <item>Bahrain</item>
+        <item>Bangladesh</item>
+        <item>Barbados</item>
+        <item>Belarus</item>
+        <item>Belgium</item>
+        <item>Belize</item>
+        <item>Benin</item>
+    </array>
+</resources>

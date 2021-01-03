@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pick_image">PICK IMAGE</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="this_is_our_license_agreement_you_can_share_this_app_anywhere_that_you_want_and_use_it_however_you_want_just_remember_to_enjoy">This is our license agreement: You can share this app anywhere that you want and use it however you want. Just remember to enjoy.</string>
+    <string name="i_agree">I agree</string>
+</resources>
