@@ -23,6 +23,18 @@ public class Book {
         this.isExpanded = false;
     }
 
+    public Book(Book b) {
+        this.id = b.id;
+        this.name = b.name;
+        this.author = b.author;
+        this.pages = b.pages;
+        this.imageUrl = b.imageUrl;
+        this.shortDesc = b.shortDesc;
+        this.longDesc = b.longDesc;
+        this.isExpanded = false;
+    }
+
+    
     public boolean isExpanded() {
         return isExpanded;
     }

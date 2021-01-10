@@ -1,7 +1,9 @@
 package com.example.mylibrary;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +29,67 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        btnAlreadyRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AlreadyReadBookActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnWishList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WantToReadActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSeeYourFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FavoriteBookActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCurrentlyReading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CurrentlyReadBookActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnShowAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getString(R.string.app_name));
+                builder.setMessage("Design and maintained by Chenyang at chenyang-wang.com \n" +
+                        "Check my website");
+                builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setPositiveButton("Visit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Show the website
+                        Intent intent = new Intent(MainActivity.this, WebsiteActivity.class);
+                        intent.putExtra("url", "https://google.com");
+                        startActivity(intent);
+                    }
+                });
+                builder.create().show();
+
+            }
+        });
+
+
     }
 
     private void initViews() {

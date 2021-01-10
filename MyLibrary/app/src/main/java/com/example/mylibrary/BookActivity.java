@@ -2,14 +2,21 @@ package com.example.mylibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 public class BookActivity extends AppCompatActivity {
+
+    public static final String BOOK_ID_KEY = "bookId";
 
     ImageView imgBook;
     Button btnAddToCurrentlyReading, btnAddToWishList, btnAddToAlreadyRead, btnAddToFavorites;
@@ -21,10 +28,144 @@ public class BookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book);
 
         initViews();
-        Book book = new Book(1, "1Q84", "Haruki Murakami", 130, "https://images-na.ssl-images-amazon.com/images/I/81M0jxrDz5L.jpg", "A work of madding brilliance",
-                "1Q84 is a dystopian novel written by Japanese writer Haruki Murakami, first published in three volumes in Japan in 2009–10. It covers a fictionalized year of 1984 in parallel with a \"real\" one. The novel is a story of how a woman named Aomame begins to notice strange changes occurring in the world. /n 1Q84 is a dystopian novel written by Japanese writer Haruki Murakami, first published in three volumes in Japan in 2009–10. It covers a fictionalized year of 1984 in parallel with a \"real\" one. The novel is a story of how a woman named Aomame begins to notice strange changes occurring in the world.");
-        setData(book);
+        Intent intent = getIntent();
+        if (null != intent){
+            int bookId = intent.getIntExtra(BOOK_ID_KEY, -1);
+            if (bookId != -1){
+                Book incomingBook = Utils.getInstance().getBookById(bookId);
+                if (incomingBook != null) {
+                    setData(incomingBook);
+                    handleAlreadyRead(incomingBook);
+                    handleWantToReadBooks(incomingBook);
+                    handleCurrentlyReadingBooks(incomingBook);
+                    handleFavoriteBooks(incomingBook);
+                }
+            }
+        }
 
+
+    }
+
+    private void handleFavoriteBooks(final Book incomingBook) {
+        ArrayList<Book> favoriteBooks = Utils.getInstance().getFavoriteBooks();
+        boolean bookFavorite = false;
+        for (Book b: favoriteBooks){
+            if (b.getId() == incomingBook.getId()){
+                bookFavorite = true;
+                break;
+            }
+        }
+        if (bookFavorite){
+            btnAddToFavorites.setEnabled(false);
+        }else {
+            btnAddToFavorites.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance().addToFavorites(incomingBook)){
+                        Toast.makeText(BookActivity.this, "Book added", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, FavoriteBookActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(BookActivity.this, "Book adding failed", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
+
+    }
+
+    private void handleCurrentlyReadingBooks(final Book incomingBook) {
+        ArrayList<Book> currentlyReadBooks = Utils.getInstance().getCurrentlyReadingBooks();
+        boolean bookCurrentlyRead = false;
+        for (Book b: currentlyReadBooks){
+            if (b.getId() == incomingBook.getId()){
+                bookCurrentlyRead = true;
+                break;
+            }
+        }
+        if (bookCurrentlyRead){
+            btnAddToCurrentlyReading.setEnabled(false);
+        }else {
+            btnAddToCurrentlyReading.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance().addToCurrentlyReadingBooks(incomingBook)){
+                        Toast.makeText(BookActivity.this, "Book added", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, CurrentlyReadBookActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(BookActivity.this, "Book adding failed", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
+    }
+
+    private void handleWantToReadBooks(final Book incomingBook) {
+        ArrayList<Book> wantToReadBooks = Utils.getInstance().getWantToReadBooks();
+        boolean bookWantToRead = false;
+        for (Book b: wantToReadBooks){
+            if (b.getId() == incomingBook.getId()){
+                bookWantToRead = true;
+                break;
+            }
+        }
+        if (bookWantToRead){
+            btnAddToWishList.setEnabled(false);
+        }else {
+            btnAddToWishList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance().addToWantToRead(incomingBook)){
+                        Toast.makeText(BookActivity.this, "Book added", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, WantToReadActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(BookActivity.this, "Book adding failed", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
+    }
+
+    /**
+     * Enable and disable button,
+     * Add the book to Already Read Book ArrayList
+     * @param incomingBook
+     */
+    private void handleAlreadyRead(final Book incomingBook) {
+        ArrayList<Book> alreadyReadBooks = Utils.getInstance().getAlreadyReadBooks();
+        boolean bookAlreadyRead = false;
+        for (Book b: alreadyReadBooks){
+            if (b.getId() == incomingBook.getId()){
+                bookAlreadyRead = true;
+                break;
+            }
+        }
+        if (bookAlreadyRead){
+            btnAddToAlreadyRead.setEnabled(false);
+        }else {
+            btnAddToAlreadyRead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance().addToAlreadyRead(incomingBook)){
+                        Toast.makeText(BookActivity.this, "Book added", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, AlreadyReadBookActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(BookActivity.this, "Book adding failed", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
     }
 
     private void setData(Book book) {
