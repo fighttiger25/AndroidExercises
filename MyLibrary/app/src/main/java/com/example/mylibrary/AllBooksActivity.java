@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class AllBooksActivity extends AppCompatActivity {
 
     private RecyclerView recViewbooks;
@@ -20,8 +22,12 @@ public class AllBooksActivity extends AppCompatActivity {
 
 //        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         recViewbooks = findViewById(R.id.recViewBooks);
-        adapter = new BookRecViewAdapter(this, "allBooks");
-        adapter.setBooks(Utils.getInstance().getAllBooks());
+        adapter = new BookRecViewAdapter(this, "allBooks", new UpdateCallBack() {
+            @Override
+            public void updateView(AppCompatActivity activity) {
+            }
+        });
+        adapter.setBooks(Utils.getInstance(this).getAllBooks());
 
         recViewbooks.setAdapter(adapter);
         // recViewbooks.setLayoutManager(new GridLayoutManager(this, 2));

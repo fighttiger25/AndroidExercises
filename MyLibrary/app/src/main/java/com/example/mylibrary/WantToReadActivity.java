@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class WantToReadActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -17,8 +19,17 @@ public class WantToReadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_want_to_read);
 
         recyclerView = findViewById(R.id.booksRecView);
-        BookRecViewAdapter adapter = new BookRecViewAdapter(this, "wantToRead");
-        adapter.setBooks(Utils.getInstance().getWantToReadBooks());
+        BookRecViewAdapter adapter = new BookRecViewAdapter(this, "wantToRead", new UpdateCallBack() {
+            @Override
+            public void updateView(AppCompatActivity activity) {
+                RecyclerView recyclerView = findViewById(R.id.booksRecView);
+                ArrayList<Book> books = Utils.getInstance(activity).getWantToReadBooks();
+                BookRecViewAdapter adapter = (BookRecViewAdapter) recyclerView.getAdapter();
+                adapter.setBooks(books);
+                recyclerView.setAdapter(adapter);
+            }
+        });
+        adapter.setBooks(Utils.getInstance(this).getWantToReadBooks());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

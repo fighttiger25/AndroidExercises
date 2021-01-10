@@ -16,11 +16,20 @@ public class CurrentlyReadBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currently_read_book);
 
+        UpdateCallBack updateCallBack = new UpdateCallBack() {
+            @Override
+            public void updateView(AppCompatActivity activity) {
+                RecyclerView recyclerView = findViewById(R.id.bookRecView);
+                ArrayList<Book> books = Utils.getInstance(activity).getCurrentlyReadingBooks();
+                BookRecViewAdapter adapter = (BookRecViewAdapter) recyclerView.getAdapter();
+                adapter.setBooks(books);
+                recyclerView.setAdapter(adapter);
+            }
+        };
+
         RecyclerView recyclerView = findViewById(R.id.bookRecView);
-        BookRecViewAdapter adapter = new BookRecViewAdapter(this, "currentlyRead");
-
-
-        ArrayList<Book> currentlyReadBooks = Utils.getInstance().getCurrentlyReadingBooks();
+        BookRecViewAdapter adapter = new BookRecViewAdapter(this, "currentlyRead", updateCallBack);
+        ArrayList<Book> currentlyReadBooks = Utils.getInstance(this).getCurrentlyReadingBooks();
         adapter.setBooks(currentlyReadBooks);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -33,5 +42,7 @@ public class CurrentlyReadBookActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+
 
 }

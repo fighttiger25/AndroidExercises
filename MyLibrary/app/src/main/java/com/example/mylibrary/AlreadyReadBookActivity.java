@@ -19,10 +19,20 @@ public class AlreadyReadBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_already_read_book);
 
         recyclerView = findViewById(R.id.bookRecView);
-        BookRecViewAdapter adapter = new BookRecViewAdapter(this, "alreadyRead");
+        UpdateCallBack updateCallBack = new UpdateCallBack() {
+            @Override
+            public void updateView(AppCompatActivity activity) {
+                RecyclerView recyclerView = findViewById(R.id.bookRecView);
+                ArrayList<Book> books = Utils.getInstance(activity).getAlreadyReadBooks();
+                BookRecViewAdapter adapter = (BookRecViewAdapter) recyclerView.getAdapter();
+                adapter.setBooks(books);
+                recyclerView.setAdapter(adapter);
+            }
+        };
+        BookRecViewAdapter adapter = new BookRecViewAdapter(this,"alreadyRead", updateCallBack);
 
 
-        ArrayList<Book> alreadyReadBooks = Utils.getInstance().getAlreadyReadBooks();
+        ArrayList<Book> alreadyReadBooks = Utils.getInstance(this).getAlreadyReadBooks();
         adapter.setBooks(alreadyReadBooks);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

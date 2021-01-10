@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
@@ -22,18 +23,21 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import static android.os.Debug.waitForDebugger;
 import static com.example.mylibrary.BookActivity.BOOK_ID_KEY;
 
 public class BookRecViewAdapter extends RecyclerView.Adapter<BookRecViewAdapter.ViewHolder> {
     private static final String TAG = "BookRecViewAdapter";
 
     private ArrayList<Book> books = new ArrayList<>();
-    private Context mContext;
+    private AppCompatActivity mContext;
     private String parentActivity;
+    private UpdateCallBack updateCallBack;
 
-    public BookRecViewAdapter(Context mContext, String parentActivity) {
-        this.mContext = mContext;
+    public BookRecViewAdapter(AppCompatActivity mActivity, String parentActivity, UpdateCallBack updateCallBack) {
+        this.mContext = mActivity;
         this.parentActivity = parentActivity;
+        this.updateCallBack = updateCallBack;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -126,8 +130,9 @@ public class BookRecViewAdapter extends RecyclerView.Adapter<BookRecViewAdapter.
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (Utils.getInstance().removeAlreadyReadBook(books.get(position))){
+                                if (Utils.getInstance(mContext).removeAlreadyReadBook(books.get(position))){
                                     Toast.makeText(mContext, "removed", Toast.LENGTH_SHORT).show(); // asynchronous
+                                    updateCallBack.updateView(mContext);
                                     notifyDataSetChanged();
                                 }else{
                                     Toast.makeText(mContext, "Error, please try again!", Toast.LENGTH_SHORT).show();
@@ -155,8 +160,11 @@ public class BookRecViewAdapter extends RecyclerView.Adapter<BookRecViewAdapter.
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (Utils.getInstance().removeCurrentlyReadingBooks(books.get(position))){
+                                if (Utils.getInstance(mContext).removeCurrentlyReadingBooks(books.get(position))){
                                     Toast.makeText(mContext, "removed", Toast.LENGTH_SHORT).show(); // asynchronous
+                                    // without calling this callback, the recycleView will not refresh, because we used sharedPreference, which takes too long time to update (threading issue).
+                                    // while it is not needed to be called if we use static attributes
+                                    updateCallBack.updateView(mContext);
                                     notifyDataSetChanged();
                                 }else{
                                     Toast.makeText(mContext, "Error, please try again!", Toast.LENGTH_SHORT).show();
@@ -185,8 +193,9 @@ public class BookRecViewAdapter extends RecyclerView.Adapter<BookRecViewAdapter.
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (Utils.getInstance().removeFavoriteBook(books.get(position))){
+                                if (Utils.getInstance(mContext).removeFavoriteBook(books.get(position))){
                                     Toast.makeText(mContext, "removed", Toast.LENGTH_SHORT).show(); // asynchronous
+                                    updateCallBack.updateView(mContext);
                                     notifyDataSetChanged();
                                 }else{
                                     Toast.makeText(mContext, "Error, please try again!", Toast.LENGTH_SHORT).show();
@@ -215,8 +224,9 @@ public class BookRecViewAdapter extends RecyclerView.Adapter<BookRecViewAdapter.
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (Utils.getInstance().removeWantToReadBook(books.get(position))){
+                                if (Utils.getInstance(mContext).removeWantToReadBook(books.get(position))){
                                     Toast.makeText(mContext, "removed", Toast.LENGTH_SHORT).show(); // asynchronous
+                                    updateCallBack.updateView(mContext);
                                     notifyDataSetChanged();
                                 }else{
                                     Toast.makeText(mContext, "Error, please try again!", Toast.LENGTH_SHORT).show();
